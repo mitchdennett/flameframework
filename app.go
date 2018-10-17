@@ -1,12 +1,12 @@
-package flame
+package flameframework
 
 import (
-    "net/http"
-    "sync"
+	"net/http"
+	"sync"
 )
 
 type app struct {
-    response http.ResponseWriter
+	response http.ResponseWriter
 }
 
 var Current *app
@@ -17,17 +17,17 @@ func init() {
 }
 
 func GetInstance() *app {
-    once.Do(func() {
-        Current = &app{}
-    })
-    return Current
+	once.Do(func() {
+		Current = &app{}
+	})
+	return Current
 }
 
 func (a *app) SetResponse(r http.ResponseWriter) {
-    a.response = r
-    return
+	a.response = r
+	return
 }
 
-func (a *app) GetResponse() (http.ResponseWriter) {
-    return a.response
+func (a *app) GetResponse() http.ResponseWriter {
+	return a.response
 }
