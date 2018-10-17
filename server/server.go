@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"reflect"
 
-	webroutes "github.com/app/routes"
 	"github.com/julienschmidt/httprouter"
-	. "github.com/mitchdennett/flameframework/"
+	. "github.com/mitchdennett/flameframework"
 	"github.com/mitchdennett/flameframework/routes"
+	webroutes "github.com/mitchdennett/flameproject/routes"
 )
 
 type myHandler struct {
