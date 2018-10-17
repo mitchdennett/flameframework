@@ -77,9 +77,9 @@ func registerRoutes(handler *myHandler, routeList []routes.Route) {
 
 	for _, route := range routeList {
 		if route.Route_type == "GET"{
-			handler.router.GET(route.Url, route.Controller.Show)
+			handler.router.GET(route.Url, route.Controller)
 		} else if route.Route_type == "POST"{
-			handler.router.POST(route.Url, route.Controller.Show)
+			handler.router.POST(route.Url, route.Controller)
 		}
 
 		t := []Middleware{}

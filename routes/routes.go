@@ -2,12 +2,13 @@ package routes
 
 import (
 	"reflect"
-	. "github.com/flame/controllers"
+	"net/http"
+	"github.com/julienschmidt/httprouter"
 )
 
 type Route struct {
 	Route_type string
-	Controller BaseController
+	Controller func(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 	Url string
 	MiddlewareList []reflect.Type
 }
@@ -24,7 +25,7 @@ func Post() *Route {
 	return route
 }
 
-func (r Route) Define(url string, controller BaseController) Route {
+func (r Route) Define(url string, controller func(w http.ResponseWriter, r *http.Request, ps httprouter.Params)) Route {
 	r.Controller = controller
 	r.Url = url
 	return r
