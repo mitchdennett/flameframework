@@ -2,9 +2,10 @@ package view
 
 import (
 	"fmt"
-	"os"
 	"html/template"
-	."github.com/flame"
+	"os"
+
+	. "github.com/mitchdennett/flameframework"
 )
 
 func Render(templatePath string, data interface{}) {
@@ -13,9 +14,9 @@ func Render(templatePath string, data interface{}) {
 	if err != nil {
 		return
 	}
-	
+
 	w := Current.GetResponse()
-	
+
 	t, _ := template.ParseFiles(d + "/templates/" + templatePath)
 	t.Execute(w, data)
 }

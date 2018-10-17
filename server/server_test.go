@@ -1,13 +1,13 @@
 package server
 
 import (
-	"testing"
 	"net/http"
-    "net/http/httptest"
-	"github.com/flame/routes" 
-	"github.com/flame/test"
-)
+	"net/http/httptest"
+	"testing"
 
+	"github.com/mitchdennett/flameframework/routes"
+	"github.com/mitchdennett/flameframework/test"
+)
 
 func TestServer(t *testing.T) {
 	var routeList = []routes.Route{
@@ -18,17 +18,17 @@ func TestServer(t *testing.T) {
 	registerRoutes(handler, routeList)
 
 	req, err := http.NewRequest("GET", "/", nil)
-    if err != nil {
-        t.Fatal(err)
-    }
+	if err != nil {
+		t.Fatal(err)
+	}
 
-    // We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
-    rr := httptest.NewRecorder()
+	// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+	rr := httptest.NewRecorder()
 
-    // Our handlers satisfy http.Handler, so we can call their ServeHTTP method 
-    // directly and pass in our Request and ResponseRecorder.
+	// Our handlers satisfy http.Handler, so we can call their ServeHTTP method
+	// directly and pass in our Request and ResponseRecorder.
 	handler.ServeHTTP(rr, req)
-	
+
 	// Check the status code is what we expect.
 	if status := rr.Code; status != http.StatusOK {
 		t.Errorf("handler returned wrong status code: got %v want %v",

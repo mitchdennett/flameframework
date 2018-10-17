@@ -3,15 +3,16 @@ package drivers
 import (
 	"crypto/tls"
 	"fmt"
-	"os"
-	"net/smtp"
 	"log"
-	"github.com/flame/contracts"
+	"net/smtp"
+	"os"
+
+	"github.com/mitchdennett/flameframework/contracts"
 )
 
 type MailSmtpDriver struct {
-	to string
-	from string
+	to      string
+	from    string
 	message string
 	subject string
 }
@@ -53,15 +54,15 @@ func (m MailSmtpDriver) Send(message string) {
 	)
 
 	// TLS config
-	tlsconfig := &tls.Config {
+	tlsconfig := &tls.Config{
 		InsecureSkipVerify: true,
-		ServerName: host,
+		ServerName:         host,
 	}
 
 	// Here is the key, you need to call tls.Dial instead of smtp.Dial
 	// for smtp servers running on 465 that require an ssl connection
 	// from the very beginning (no starttls)
-	conn, err := tls.Dial("tcp", host + ":" + port, tlsconfig)
+	conn, err := tls.Dial("tcp", host+":"+port, tlsconfig)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -72,39 +73,39 @@ func (m MailSmtpDriver) Send(message string) {
 	}
 
 	// Auth
-    if err = c.Auth(auth); err != nil {
-        log.Panic(err)
+	if err = c.Auth(auth); err != nil {
+		log.Panic(err)
 	}
 
 	// To && From
-    if err = c.Mail(m.from); err != nil {
-        log.Panic(err)
-    }
-
-    if err = c.Rcpt(m.to); err != nil {
-        log.Panic(err)
-    }
-
-    // Data
-    w, err := c.Data()
-    if err != nil {
-        log.Panic(err)
+	if err = c.Mail(m.from); err != nil {
+		log.Panic(err)
 	}
-	
+
+	if err = c.Rcpt(m.to); err != nil {
+		log.Panic(err)
+	}
+
+	// Data
+	w, err := c.Data()
+	if err != nil {
+		log.Panic(err)
+	}
+
 	msg := []byte("To: " + m.to + "\r\n" +
 		"Subject: " + m.subject + "\r\n" +
-		"\r\n" + m.message + 
+		"\r\n" + m.message +
 		"\r\n")
 
-    _, err = w.Write([]byte(msg))
-    if err != nil {
-        log.Panic(err)
-    }
+	_, err = w.Write([]byte(msg))
+	if err != nil {
+		log.Panic(err)
+	}
 
-    err = w.Close()
-    if err != nil {
-        log.Panic(err)
-    }
+	err = w.Close()
+	if err != nil {
+		log.Panic(err)
+	}
 
 	c.Quit()
 }

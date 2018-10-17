@@ -1,17 +1,17 @@
 package server
 
 import (
-	"reflect"
 	"net/http"
-	"github.com/flame/routes" 
+	"reflect"
+
 	webroutes "github.com/app/routes"
 	"github.com/julienschmidt/httprouter"
-	."github.com/flame/middleware"
-	."github.com/flame"
+	. "github.com/mitchdennett/flameframework/"
+	"github.com/mitchdennett/flameframework/routes"
 )
 
-type myHandler struct{
-	router 	   *httprouter.Router
+type myHandler struct {
+	router *httprouter.Router
 }
 
 var middlewareMap map[string][]Middleware
@@ -25,13 +25,12 @@ func (mux *myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	router := mux.router
 	path := r.URL.Path
-	
 
 	if handle, ps, _ := router.Lookup(r.Method, path); handle != nil {
 
 		//Running before middleware
 		abortExecution := false
-		middlewareList := middlewareMap[r.Method + "::" + path]
+		middlewareList := middlewareMap[r.Method+"::"+path]
 		for _, middleware := range middlewareList {
 			retBool := middleware.Before(w, r)
 
@@ -47,14 +46,13 @@ func (mux *myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		for _, middleware := range middlewareList {
-			middleware.After(w,r)
+			middleware.After(w, r)
 		}
 
 		Current.SetResponse(nil)
 		return
-	} 
+	}
 
-	
 	http.NotFound(w, r)
 	return
 }
@@ -76,9 +74,9 @@ func registerRoutes(handler *myHandler, routeList []routes.Route) {
 	middlewareMap = make(map[string][]Middleware)
 
 	for _, route := range routeList {
-		if route.Route_type == "GET"{
+		if route.Route_type == "GET" {
 			handler.router.GET(route.Url, route.Controller)
-		} else if route.Route_type == "POST"{
+		} else if route.Route_type == "POST" {
 			handler.router.POST(route.Url, route.Controller)
 		}
 
@@ -87,7 +85,7 @@ func registerRoutes(handler *myHandler, routeList []routes.Route) {
 			ms := reflect.New(middleware).Elem().Interface().(Middleware)
 			t = append(t, ms)
 		}
-		middlewareMap[route.Route_type + "::" + route.Url] = t
-    }
+		middlewareMap[route.Route_type+"::"+route.Url] = t
+	}
 
 }

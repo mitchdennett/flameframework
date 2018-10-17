@@ -2,11 +2,10 @@ package mail
 
 import (
 	"os"
-	"github.com/flame/drivers"
-	"github.com/flame/contracts"
+
+	"github.com/mitchdennett/flameframework/contracts"
+	"github.com/mitchdennett/flameframework/drivers"
 )
-
-
 
 func Compose() contracts.MailContract {
 	maildriver := os.Getenv("MAIL_DRIVER")
