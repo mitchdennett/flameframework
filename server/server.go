@@ -3,12 +3,12 @@ package server
 import (
 	"net/http"
 	"reflect"
-
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	. "github.com/mitchdennett/flameframework"
 	. "github.com/mitchdennett/flameframework/middleware"
 	"github.com/mitchdennett/flameframework/routes"
-	webroutes "github.com/mitchdennett/flameproject/routes"
+	
 )
 
 type myHandler struct {
@@ -65,12 +65,14 @@ func ListenAndServe(addr string) {
 		Handler: handler,
 	}
 
-	registerRoutes(handler, webroutes.Routes)
+	registerRoutes(handler, routes.WebRoutes)
 
 	server.ListenAndServe()
 }
 
 func registerRoutes(handler *myHandler, routeList []routes.Route) {
+
+	fmt.Println(routeList)
 
 	middlewareMap = make(map[string][]Middleware)
 
