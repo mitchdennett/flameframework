@@ -51,8 +51,6 @@ func (mux *myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		Current.SetResponse(nil)
 		return
-	} else {
-
 	}
 
 	http.NotFound(w, r)
