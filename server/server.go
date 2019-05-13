@@ -3,12 +3,11 @@ package server
 import (
 	"net/http"
 	"reflect"
-	"fmt"
+
 	"github.com/julienschmidt/httprouter"
 	. "github.com/mitchdennett/flameframework"
 	. "github.com/mitchdennett/flameframework/middleware"
 	"github.com/mitchdennett/flameframework/routes"
-	
 )
 
 type myHandler struct {
@@ -52,6 +51,8 @@ func (mux *myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		Current.SetResponse(nil)
 		return
+	} else {
+
 	}
 
 	http.NotFound(w, r)
@@ -60,6 +61,7 @@ func (mux *myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func ListenAndServe(addr string) {
 	handler := NewHandler()
+
 	server := http.Server{
 		Addr:    addr,
 		Handler: handler,
@@ -71,8 +73,6 @@ func ListenAndServe(addr string) {
 }
 
 func registerRoutes(handler *myHandler, routeList []routes.Route) {
-
-	fmt.Println(routeList)
 
 	middlewareMap = make(map[string][]Middleware)
 
@@ -91,4 +91,5 @@ func registerRoutes(handler *myHandler, routeList []routes.Route) {
 		middlewareMap[route.Route_type+"::"+route.Url] = t
 	}
 
+	handler.router.ServeFiles("/static/*filepath", http.Dir("static"))
 }
