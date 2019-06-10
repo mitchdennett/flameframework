@@ -3,8 +3,8 @@ package test
 import (
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
 	"github.com/mitchdennett/flameframework/view"
+	"github.com/mitchdennett/httprouter"
 )
 
 type TestController struct {

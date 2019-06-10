@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/julienschmidt/httprouter"
 	. "github.com/mitchdennett/flameframework"
 	. "github.com/mitchdennett/flameframework/middleware"
 	"github.com/mitchdennett/flameframework/routes"
+	"github.com/mitchdennett/httprouter"
 )
 
 type myHandler struct {
@@ -26,11 +26,12 @@ func (mux *myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	router := mux.router
 	path := r.URL.Path
 
-	if handle, ps, _ := router.Lookup(r.Method, path); handle != nil {
+	if handle, ps, _, ret_path := router.Lookup(r.Method, path); handle != nil {
 
 		//Running before middleware
 		abortExecution := false
-		middlewareList := middlewareMap[r.Method+"::"+path]
+
+		middlewareList := middlewareMap[r.Method+"::"+ret_path]
 		for _, middleware := range middlewareList {
 			retBool := middleware.Before(w, r)
 
